@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NPKP Ndev Anti-Cheat Console</title>
+  <meta name="description" content="ផ្ទាំងគ្រប់គ្រងប្រព័ន្ធការពារការโกง NPKP ndev-core-five សម្រាប់ត្រួតពិនិត្យរបាយការណ៍ និងការដាក់ HWID Ban។" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500&family=Mona+Sans:wdth,wght@100,400;100,500;125,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#pageHeading">រំលងទៅខ្លឹមសារគោល</a>
+
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="login-wrap hidden">
+    <div class="login-card">
+      <div class="login-head">
+        <h2>Ndev Anti-Cheat Center</h2>
+        <p class="login-sub">
+          ចូលគណនី Admin ដើម្បីគ្រប់គ្រងរបាយការណ៍ Cheat, រូបភាពភស្តុតាង និងការចាក់សោរ Motherboard HWID។
+        </p>
+      </div>
+      <form id="loginForm" class="login-stack">
+        <div class="field">
+          <label for="loginUsername">ឈ្មោះគណនី (Username)</label>
+          <input type="text" id="loginUsername" class="field-control" required autocomplete="username" placeholder="admin" />
+        </div>
+        <div class="field">
+          <label for="loginPassword">លេខសម្ងាត់ (Password)</label>
+          <input type="password" id="loginPassword" class="field-control" required autocomplete="current-password" placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">ចូលប្រព័ន្ធ (Sign in)</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD SHELL -->
+  <div id="appShell" class="app-shell">
+    <aside class="sidebar" aria-label="ម៉ឺនុយគ្រប់គ្រងគោល">
+      <div class="sidebar-logo">
+        <div class="logo-mark" aria-hidden="true">NP</div>
+        <div>
+          <div class="logo-title">NPKP Shield</div>
+          <div class="logo-meta">ndev-core-five v1.0</div>
+        </div>
+      </div>
+
+      <nav class="nav-list" aria-label="ផ្នែកប្រតិបត្តិការ">
+        <button type="button" class="nav-btn active" data-tab="overview">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg>
+            <span>ទិដ្ឋភាពទូទៅ</span>
+          </span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="reports">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h12v10H2z"/><path d="M5 7h6M5 10h4"/></svg>
+            <span>របាយការណ៍ &amp; រូបភាព</span>
+          </span>
+          <span id="navBanCount" class="nav-pill danger">0</span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="bans">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M4 4l8 8"/></svg>
+            <span>បញ្ជី HWID Ban</span>
+          </span>
+          <span id="navActiveBans" class="nav-pill">0</span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="players">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 13.5c0-2.5 2.2-4 5-4s5 1.5 5 4"/></svg>
+            <span>បញ្ជីអ្នកលេង</span>
+          </span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="detections">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h6"/></svg>
+            <span>កម្មវិធីហាមឃាត់</span>
+          </span>
+          <span id="navDetectionsCount" class="nav-pill">0</span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="logs">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>
+            <span>កំណត់ហេតុបិទហ្គេម</span>
+          </span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="settings">
+          <span class="nav-btn-label">
+            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v2M8 12v2M2 8h2M12 8h2"/></svg>
+            <span>ការកំណត់ &amp; Discord</span>
+          </span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <span id="adminLabel" class="operator-name">admin</span>
+        <button type="button" id="logoutBtn" class="btn btn-ghost btn-sm">ចាកចេញ</button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="page-title">
+          <h1 id="pageHeading">ទិដ្ឋភាពទូទៅ (Overview)</h1>
+          <p id="pageSubheading">តាមដានស្ថានភាពការពារការโกงរបស់ ndev-core-five ផ្ទាល់។</p>
+        </div>
+        <div class="topbar-actions">
+          <span id="autoBanStatusBadge" class="badge badge-ok" role="status">Auto-Ban: On</span>
+          <button type="button" id="refreshBtn" class="btn btn-ghost btn-sm">ផ្ទុកឡើងវិញ</button>
+        </div>
+      </header>
+
+      <!-- TAB: OVERVIEW -->
+      <section id="tab-overview" class="tab-section">
+        <div class="telemetry-strip" aria-label="ស្ថិតិប្រព័ន្ធសរុប">
+          <div class="stat-cell">
+            <div class="stat-label">របាយការណ៍ Ban សរុប</div>
+            <div class="stat-value stat-value--alert" id="statBans">0</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">របាយការណ៍ Warning</div>
+            <div class="stat-value stat-value--warn" id="statWarnings">0</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">ម៉ាស៊ីនជាប់ HWID Ban</div>
+            <div class="stat-value stat-value--signal" id="statActiveBans">0</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">អ្នកលេងស្គាល់អត្តសញ្ញាណ</div>
+            <div class="stat-value" id="statPlayers">0</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">កម្មវិធីហាមឃាត់កំពុងបើក</div>
+            <div class="stat-value" id="statDetections">0</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">របាយការណ៍ថ្ងៃនេះ</div>
+            <div class="stat-value" id="statToday">0</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">ការចាប់បានថ្មីៗ (Recent alerts)</div>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="switchTab('reports')">មើលទាំងអស់</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ប្រភេទ</th>
+                    <th>អ្នកលេង</th>
+                    <th>មូលហេតុចាប់បាន</th>
+                    <th>រូបភាព</th>
+                    <th>ពេលវេលា</th>
+                  </tr>
+                </thead>
+                <tbody id="overviewAlertsBody">
+                  <tr class="state-row">
+                    <td colspan="5">
+                      <div class="state-block">
+                        <strong>មិនទាន់មានរបាយការណ៍ Ban ឬ Warning នៅឡើយទេ</strong>
+                        <span>រាល់ការចាប់បានកម្មវិធី Cheat ពី ndev-core-five នឹងបង្ហាញនៅទីនេះភ្លាមៗ។</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">ម៉ាស៊ីនដែលទើបជាប់ Ban ថ្មីៗ</div>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="switchTab('bans')">គ្រប់គ្រងបញ្ជី</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>អ្នកលេង / Email</th>
+                    <th>មូលហេតុ</th>
+                    <th>ទប់ស្កាត់</th>
+                  </tr>
+                </thead>
+                <tbody id="overviewBansBody">
+                  <tr class="state-row">
+                    <td colspan="3">
+                      <div class="state-block">
+                        <strong>មិនទាន់មានម៉ាស៊ីនជាប់ HWID Ban ទេ</strong>
+                        <span>អ្នកអាចដាក់ Ban ម៉ាស៊ីនដោយផ្ទាល់ ឬបើក Auto-Ban នៅក្នុងការកំណត់។</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: REPORTS -->
+      <section id="tab-reports" class="tab-section hidden">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="tabs" id="reportTypeTabs" role="tablist" aria-label="ប្រភេទរបាយការណ៍">
+              <button type="button" class="tab-btn active" data-type="">ទាំងអស់</button>
+              <button type="button" class="tab-btn" data-type="ALERTS">Alerts (Ban &amp; Warn)</button>
+              <button type="button" class="tab-btn" data-type="BAN">Ban</button>
+              <button type="button" class="tab-btn" data-type="WARNING">Warning</button>
+              <button type="button" class="tab-btn" data-type="TRACKING">Tracking</button>
+            </div>
+            <div class="filter-bar">
+              <input type="text" id="reportSearch" class="field-control" aria-label="ស្វែងរករបាយការណ៍" placeholder="ស្វែងរកឈ្មោះ, Email, HWID, Discord ឬ Cheat…" />
+              <button type="button" id="purgeTrackingBtn" class="btn btn-ghost btn-sm">លុប Tracking ចាស់ៗ</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>លេខកូដ</th>
+                  <th>ប្រភេទ</th>
+                  <th>អ្នកលេង / Discord</th>
+                  <th>HWID</th>
+                  <th>អ្វីដែលចាប់បាន (Findings)</th>
+                  <th>អេក្រង់</th>
+                  <th>ស្ថានភាព</th>
+                  <th>ពេលវេលា</th>
+                  <th>សកម្មភាព</th>
+                </tr>
+              </thead>
+              <tbody id="reportsTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span id="reportsPageInfo" class="cell-sub"></span>
+            <div class="pager-group">
+              <button type="button" id="reportsPrevBtn" class="btn btn-ghost btn-sm">ទំព័រមុន</button>
+              <button type="button" id="reportsNextBtn" class="btn btn-ghost btn-sm">ទំព័របន្ទាប់</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: HWID BANS -->
+      <section id="tab-bans" class="tab-section hidden">
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">ដាក់ Ban ម៉ាស៊ីនដោយផ្ទាល់ (Ban by HWID)</div>
+            </div>
+            <form id="manualBanForm" class="form-grid">
+              <div class="form-row">
+                <div class="field">
+                  <label for="banHwidInput">លេខកូដ HWID (32 to 64 hex) *</label>
+                  <input type="text" id="banHwidInput" class="field-control mono" required placeholder="a3f9c012e4b8…" />
+                </div>
+                <div class="field">
+                  <label for="banDurationInput">រយៈពេល Ban</label>
+                  <select id="banDurationInput" class="field-control">
+                    <option value="">អចិន្ត្រៃយ៍ (Permanent)</option>
+                    <option value="24">១ ថ្ងៃ (24 ម៉ោង)</option>
+                    <option value="72">៣ ថ្ងៃ (72 ម៉ោង)</option>
+                    <option value="168">៧ ថ្ងៃ (1 សប្ដាហ៍)</option>
+                    <option value="720">៣០ ថ្ងៃ (1 ខែ)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label for="banUsernameInput">ឈ្មោះអ្នកលេង (ជម្រើស)</label>
+                  <input type="text" id="banUsernameInput" class="field-control" placeholder="SokhaRP" />
+                </div>
+                <div class="field">
+                  <label for="banEmailInput">អ៊ីមែល (ជម្រើស)</label>
+                  <input type="email" id="banEmailInput" class="field-control" placeholder="player@example.com" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="banReasonInput">មូលហេតុ Ban (បង្ហាញលើអេក្រង់អ្នកលេងពេលបិទហ្គេម) *</label>
+                <input type="text" id="banReasonInput" class="field-control" required placeholder="ប្រើប្រាស់កម្មវិធី Cheat (Eulen / 420)" />
+              </div>
+              <div>
+                <button type="submit" class="btn btn-primary">ដាក់ Ban HWID ឥឡូវនេះ</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-title">ដាក់ Ban តាមរយៈអ៊ីមែល (Ban by email)</div>
+                <p class="panel-note">
+                  ស្វែងរកគ្រប់ Motherboard និង HWID ទាំងអស់ដែលធ្លាប់ Login ជាមួយ Email នេះ រួចដាក់ Ban ភ្លាមៗ។
+                </p>
+              </div>
+            </div>
+            <form id="emailBanForm" class="form-grid">
+              <div class="field">
+                <label for="emailBanAddress">អ៊ីមែលអ្នកលេង (Player email) *</label>
+                <input type="email" id="emailBanAddress" class="field-control" required placeholder="player@example.com" />
+              </div>
+              <div class="field">
+                <label for="emailBanReason">មូលហេតុ Ban *</label>
+                <input type="text" id="emailBanReason" class="field-control" required placeholder="Account and hardware banned by administrator" />
+              </div>
+              <div>
+                <button type="submit" class="btn btn-danger">ដាក់ Ban គ្រប់ម៉ាស៊ីនរបស់ Email នេះ</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="tabs" id="banStatusTabs" role="tablist" aria-label="ស្ថានភាព Ban">
+              <button type="button" class="tab-btn active" data-status="active">កំពុងជាប់ Ban</button>
+              <button type="button" class="tab-btn" data-status="inactive">បានដោះ Ban</button>
+              <button type="button" class="tab-btn" data-status="all">ទាំងអស់</button>
+            </div>
+            <input type="text" id="banSearch" class="field-control search-narrow" aria-label="ស្វែងរកបញ្ជី Ban" placeholder="ស្វែងរក HWID, Motherboard, ឈ្មោះ, Email…" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>អ្នកលេង / Email / Discord</th>
+                  <th>Motherboard &amp; HWID</th>
+                  <th>មូលហេតុ</th>
+                  <th>ដាក់ដោយ</th>
+                  <th>ផុតកំណត់</th>
+                  <th>ចំនួនដងទប់ស្កាត់</th>
+                  <th>សកម្មភាព</th>
+                </tr>
+              </thead>
+              <tbody id="bansTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: PLAYERS -->
+      <section id="tab-players" class="tab-section hidden">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">បញ្ជីអ្នកលេង និងម៉ាស៊ីនដែលធ្លាប់ភ្ជាប់មកកាន់ប្រព័ន្ធ</div>
+            <input type="text" id="playerSearch" class="field-control search-narrow" aria-label="ស្វែងរកអ្នកលេង" placeholder="ស្វែងរក Username, Email, Discord, HWID…" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>អ្នកលេង</th>
+                  <th>Email / License</th>
+                  <th>Discord / Steam</th>
+                  <th>Motherboard &amp; HWID</th>
+                  <th>កុំព្យូទ័រ / IP</th>
+                  <th>របាយការណ៍</th>
+                  <th>ឃើញចុងក្រោយ</th>
+                  <th>សកម្មភាព</th>
+                </tr>
+              </thead>
+              <tbody id="playersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: DETECTIONS -->
+      <section id="tab-detections" class="tab-section hidden">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">បន្ថែមឈ្មោះកម្មវិធីហាមឃាត់ថ្មី (Dynamic process blacklist)</div>
+              <p class="panel-note">
+                រាល់ពេលអ្នកលេងបើកហ្គេម ndev-core-five នឹងទាញបញ្ជីនេះពី /api/anticheat/detections ដោយស្វ័យប្រវត្តិ។
+              </p>
+            </div>
+            <button type="button" id="resetDetectionsBtn" class="btn btn-ghost btn-sm">ស្ដារបញ្ជីដើម</button>
+          </div>
+          <form id="addDetectionForm" class="form-row">
+            <div class="field">
+              <label for="detExeInput">ឈ្មោះ Process (.exe ឬ .dll) *</label>
+              <input type="text" id="detExeInput" class="field-control mono" required placeholder="newcheat.exe" />
+            </div>
+            <div class="field">
+              <label for="detNameInput">ឈ្មោះបង្ហាញក្នុង Report *</label>
+              <input type="text" id="detNameInput" class="field-control" required placeholder="New FiveM Cheat" />
+            </div>
+            <div class="field">
+              <label for="detCategoryInput">ប្រភេទ (Category)</label>
+              <input type="text" id="detCategoryInput" class="field-control" placeholder="Custom Cheat" value="Custom Cheat" />
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary btn-block">បន្ថែមចូលបញ្ជីហាមឃាត់</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">បញ្ជីកម្មវិធីហាមឃាត់ទាំងអស់</div>
+            <input type="text" id="detSearch" class="field-control search-narrow" aria-label="ស្វែងរកកម្មវិធីហាមឃាត់" placeholder="ស្វែងរក .exe ឬឈ្មោះកម្មវិធី…" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ស្ថានភាព</th>
+                  <th>ឈ្មោះ Process</th>
+                  <th>ឈ្មោះកម្មវិធី</th>
+                  <th>ប្រភេទ</th>
+                  <th>ប្រភព</th>
+                  <th>សកម្មភាព</th>
+                </tr>
+              </thead>
+              <tbody id="detectionsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: LOGS -->
+      <section id="tab-logs" class="tab-section hidden">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">កំណត់ហេតុទប់ស្កាត់ម៉ាស៊ីនជាប់ Ban (/api/anticheat/logs)</div>
+              <p class="panel-note">
+                កំណត់ត្រាផ្ញើមកពី NdevAnticheat.cpp រាល់ពេលម៉ាស៊ីនដែលជាប់ Ban ព្យាយាមបើកហ្គេម ហើយត្រូវបានបិទភ្លាមៗ។
+              </p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>លេខកូដ</th>
+                  <th>ព្រឹត្តិការណ៍</th>
+                  <th>អ្នកលេង / Email / Discord</th>
+                  <th>HWID</th>
+                  <th>មូលហេតុ</th>
+                  <th>អាសយដ្ឋាន IP</th>
+                  <th>ពេលវេលា</th>
+                </tr>
+              </thead>
+              <tbody id="logsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB: SETTINGS -->
+      <section id="tab-settings" class="tab-section hidden">
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">គោលការណ៍ស្វ័យប្រវត្តិ និង Discord Webhooks</div>
+            </div>
+            <form id="settingsForm" class="form-grid">
+              <div class="toggle-row">
+                <div>
+                  <div class="cell-primary">ដាក់ Auto-Ban HWID ពេលចាប់បានកម្រិត Critical</div>
+                  <div class="cell-sub">ចាក់សោរ Motherboard និង HWID ស្វ័យប្រវត្តិ (រូបភាពផ្ញើផ្ទាល់ពី RAM ទៅ Discord ដោយមិនទុកក្នុង Storage)</div>
+                </div>
+                <label class="toggle-wrap" for="setAutoBan">
+                  <span class="visually-hidden">បើក ឬបិទ Auto-Ban</span>
+                  <input type="checkbox" id="setAutoBan" class="toggle-input" />
+                </label>
+              </div>
+
+              <div class="field">
+                <label for="setWebhookBan">Discord Webhook សម្រាប់ Ban (ភ្ជាប់រូបភាពអេក្រង់)</label>
+                <div class="field-inline">
+                  <input type="text" id="setWebhookBan" class="field-control" placeholder="https://discord.com/api/webhooks/…" />
+                  <button type="button" class="btn btn-ghost" onclick="testWebhook('setWebhookBan')">សាកល្បង</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="setWebhookWarning">Discord Webhook សម្រាប់ Warning</label>
+                <div class="field-inline">
+                  <input type="text" id="setWebhookWarning" class="field-control" placeholder="https://discord.com/api/webhooks/…" />
+                  <button type="button" class="btn btn-ghost" onclick="testWebhook('setWebhookWarning')">សាកល្បង</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="setWebhookTracking">Discord Webhook សម្រាប់ Tracking (ជម្រើស)</label>
+                <div class="field-inline">
+                  <input type="text" id="setWebhookTracking" class="field-control" placeholder="https://discord.com/api/webhooks/…" />
+                  <button type="button" class="btn btn-ghost" onclick="testWebhook('setWebhookTracking')">សាកល្បង</button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="setWebhookLogs">Discord Webhook សម្រាប់កំណត់ហេតុបិទហ្គេម</label>
+                <div class="field-inline">
+                  <input type="text" id="setWebhookLogs" class="field-control" placeholder="https://discord.com/api/webhooks/…" />
+                  <button type="button" class="btn btn-ghost" onclick="testWebhook('setWebhookLogs')">សាកល្បង</button>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="field">
+                  <label for="setScannerPin">Scanner PIN (Component.cpp)</label>
+                  <input type="text" id="setScannerPin" class="field-control mono" />
+                </div>
+                <div class="field">
+                  <label for="setLogSecret">Log Secret (X-Anticheat-Secret)</label>
+                  <input type="text" id="setLogSecret" class="field-control mono" />
+                </div>
+              </div>
+
+              <div>
+                <button type="submit" class="btn btn-primary">រក្សាទុកការកំណត់</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="stack-col">
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">ប្ដូរឈ្មោះគណនី និងលេខសម្ងាត់ Admin</div>
+              </div>
+              <form id="passwordForm" class="form-grid">
+                <div class="field">
+                  <label for="newAdminUsername">ឈ្មោះគណនី Admin ថ្មី</label>
+                  <input type="text" id="newAdminUsername" class="field-control" autocomplete="username" required />
+                </div>
+                <div class="field">
+                  <label for="currentAdminPassword">លេខសម្ងាត់បច្ចុប្បន្ន *</label>
+                  <input type="password" id="currentAdminPassword" class="field-control" autocomplete="current-password" required />
+                </div>
+                <div class="field">
+                  <label for="newAdminPassword">លេខសម្ងាត់ថ្មី (យ៉ាងតិច ៦ តួអក្សរ) *</label>
+                  <input type="password" id="newAdminPassword" class="field-control" autocomplete="new-password" required />
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-ghost">ផ្លាស់ប្ដូរលេខសម្ងាត់</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">ផ្លូវភ្ជាប់ API សម្រាប់ ndev-core-five</div>
+              </div>
+              <dl class="endpoint-list">
+                <div class="endpoint-row">
+                  <dt><code>POST /submit</code></dt>
+                  <dd>ទទួលរបាយការណ៍ និងបញ្ជូនរូបភាពអេក្រង់ពី RAM ទៅកាន់ Discord។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>GET /api/anticheat/detections</code></dt>
+                  <dd>ផ្ដល់បញ្ជីឈ្មោះ Process ហាមឃាត់ទៅឱ្យ Client។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>POST /api/hwid/check-hwid</code></dt>
+                  <dd>ឆែកស្ថានភាព Motherboard, Hardware Tokens និងបញ្ជាបិទហ្គេម រៀងរាល់ ៥ វិនាទី។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>POST /api/admin/players/force-quit</code></dt>
+                  <dd>បញ្ជាបិទហ្គេមអ្នកលេងពីចម្ងាយភ្លាមៗដោយស្ងាត់ៗ (Silent Close ១ ដង)។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>POST /api/anticheat/logs</code></dt>
+                  <dd>កត់ត្រាព្រឹត្តិការណ៍បិទហ្គេមនៅពេលម៉ាស៊ីនជាប់ Ban។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>POST /api/hwid/admin/ban-hwid-by-email</code></dt>
+                  <dd>ដាក់ Ban គ្រប់ម៉ាស៊ីនដែលភ្ជាប់ជាមួយអ៊ីមែលអ្នកលេង។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>POST /api/hwid/anticheat/ban</code></dt>
+                  <dd>ដាក់ Ban HWID តាមរយៈប្រព័ន្ធ API ខាងក្រៅ។</dd>
+                </div>
+                <div class="endpoint-row">
+                  <dt><code>POST /api/hwid/admin/unban-hwid</code></dt>
+                  <dd>ដោះសោរ HWID និង Hardware Tokens ទាំងអស់ឡើងវិញ។</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- REPORT DETAIL MODAL -->
+  <div id="reportModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="panel-header">
+        <div>
+          <h2 id="modalTitle">Report Details</h2>
+          <div id="modalSubtitle" class="cell-sub"></div>
+        </div>
+        <div class="modal-actions">
+          <div id="modalBanActions"></div>
+          <button type="button" id="modalDeleteBtn" class="btn btn-danger btn-sm">លុប Report</button>
+          <button type="button" onclick="closeReportModal()" class="btn btn-ghost btn-sm">បិទផ្ទាំង</button>
+        </div>
+      </div>
+
+      <div id="modalScreenSection" class="screen-viewer hidden">
+        <div id="modalMonitorTabs" class="tabs"></div>
+        <div class="screen-frame">
+          <img id="modalMainImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'/%3E" width="1280" height="720" alt="ភស្តុតាងអេក្រង់អ្នកលេងពី Discord" onclick="window.open(this.src, '_blank')" />
+        </div>
+        <div class="cell-sub">
+          ចុចលើរូបភាពដើម្បីបើកមើលទំហំពេញនៅក្នុងផ្ទាំងថ្មី។
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>អ្វីដែលបានរកឃើញ (Findings)</h3>
+          <div id="modalFindingsList" class="finding-list"></div>
+        </div>
+        <div>
+          <h3>អត្តសញ្ញាណ និងព័ត៌មានម៉ាស៊ីន</h3>
+          <div id="modalIdentityCard" class="finding-item"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

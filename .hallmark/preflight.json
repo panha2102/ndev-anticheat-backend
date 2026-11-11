@@ -1,0 +1,33 @@
+{
+  "scanned": "2026-11-11",
+  "genre": "modern-minimal",
+  "scope": "app",
+  "routes": [
+    {
+      "route": "/",
+      "files": [
+        "public/index.html",
+        "public/styles.css",
+        "public/app.js"
+      ],
+      "kind": "app screen (sign-in + 7 admin views)"
+    }
+  ],
+  "findings": {
+    "fonts": "Inter + Kantumruy Pro + JetBrains Mono (public/index.html:9, public/styles.css:27,34)",
+    "palette": "Hex custom properties on default Tailwind slate/blue/red swatches (public/styles.css:1-16)",
+    "motion": "CSS transitions including transition: all (public/styles.css:139,296)",
+    "spacing": "Ad-hoc rem spacing (public/styles.css)",
+    "framework": "Express 4 static SPA in vanilla HTML/CSS/JS (package.json:15, src/server.js:46)"
+  },
+  "preserve": [
+    "Kantumruy Pro fallback for Khmer script legibility",
+    "All 7 admin views, 26 form fields, 8 handlers, and Express API wiring"
+  ],
+  "introduce": [
+    "Hallmark app-scope theme tokens (tokens.css + base.css)",
+    "App-screen signature composition & 4-state data regions",
+    "WCAG-compliant contrast, 3:1 focus-visible rings, and 8-state controls",
+    "SVG iconography replacing emoji icons, zero inline colour literals"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "ndev-anticheat-backend",
+  "version": "1.0.0",
+  "description": "Backend API & Admin Dashboard for NPKP ndev-core-five Anti-Cheat",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node test/smoke-test.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
